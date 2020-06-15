@@ -9,8 +9,7 @@
 #include "odbc_utils.h"
 
 //Prints the passed game's information
-void printGame(VideoGame* game)
-{
+void printGame(VideoGame* game) {
 
     int i;
 
@@ -120,8 +119,7 @@ int openConnectionVerbose(SQLHANDLE sqlconnectionhandle, SQLCHAR* connectionInfo
 }
 
 //Grabbed from http://www.easysoft.com/developer/languages/c/odbc_tutorial.html#connect_full
-void extractError(char *fn, SQLHANDLE handle, SQLSMALLINT type)
-{
+void extractError(char *fn, SQLHANDLE handle, SQLSMALLINT type) {
     SQLINTEGER i = 0;
     SQLINTEGER native;
     SQLCHAR state[7];

@@ -1,8 +1,8 @@
+#
 # makefile for Lab 15 - ODBC
+#
 
 CC = gcc 
-XML_INCLUDE = -I/usr/include/libxml2
-XML_LIB = -lxml2 -lz -lm
 ODBC_LIB = -lodbc
 
 listGames: databaseInfo.h games.o odbc_utils.o listGames.c

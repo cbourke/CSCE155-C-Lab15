@@ -2,9 +2,8 @@
  * Uses ODBC to establish a connection to a mySQL database
  * filled with various game information.
  */
-
-#include <stdio.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <sqltypes.h>
 #include <sql.h>
 #include <sqlext.h>
