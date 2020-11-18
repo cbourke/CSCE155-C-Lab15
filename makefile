@@ -2,7 +2,7 @@
 # makefile for Lab 15 - ODBC
 #
 
-CC = gcc 
+CC = gcc -Wall
 ODBC_LIB = -lodbc
 
 listGames: databaseInfo.h games.o odbc_utils.o listGames.c
