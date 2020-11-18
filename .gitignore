@@ -29,3 +29,8 @@ figures/_minted*
 
 #
 .DS_Store
+
+# binaries
+*.o
+listGames
+insertGame
