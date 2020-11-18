@@ -21,13 +21,13 @@ int main(int argc, char** argv) {
   SQLHANDLE sqlstatementhandle;
 
   // String to store info that will be used to connect
-  char* connectionInfo;
+  char connectionInfo[1000];
 
   // Create the string containing information about the database connection
-  asprintf(&connectionInfo,
-           "DRIVER={%s};SERVER=%s;"
-           "PORT=%s;DATABASE=%s;UID=%s;PWD=%s;",
-           driver, server, port, database, userID, password);
+  sprintf(connectionInfo,
+          "DRIVER={%s};SERVER=%s;"
+          "PORT=%s;DATABASE=%s;UID=%s;PWD=%s;",
+          driver, server, port, database, userID, password);
 
   // Connect to the DB.  Exit if there's a problem.
   if (!setupConnection(&sqlenvhandle, &sqlconnectionhandle, &sqlstatementhandle,
