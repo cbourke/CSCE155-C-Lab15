@@ -9,8 +9,6 @@
 
 void printGame(VideoGame* game) {
 
-    int i;
-
     printf("Name: %s\n\tID: %d\n\tPublisher: ", game->name, game->id);
     
     //Publisher may be unknown
@@ -20,7 +18,7 @@ void printGame(VideoGame* game) {
         printf("Unknown\n");
 
     //Iterates over this games platforms
-    for (i = 0; i < game->numPlatforms; i++)
+    for (int i = 0; i < game->numPlatforms; i++)
     {
         printf("\tReleased on platform %s in %d\n", 
                game->platforms[i]->name,
@@ -71,7 +69,6 @@ int setupConnection(SQLHANDLE* sqlenvhandle, SQLHANDLE* sqlconnectionhandle,
     return errorFlag;
 }
 
-//Closes the SQL connection
 void finishConnection(SQLHANDLE envHandle, SQLHANDLE statementHandle, SQLHANDLE connectionHandle)
 {
     SQLFreeHandle(SQL_HANDLE_STMT, statementHandle);
@@ -80,11 +77,8 @@ void finishConnection(SQLHANDLE envHandle, SQLHANDLE statementHandle, SQLHANDLE 
     SQLFreeHandle(SQL_HANDLE_ENV, envHandle);    
 }
 
-//Opens connection to database and prints error if one occurs.  Returns -1 if fatal error occurs.
 int openConnectionVerbose(SQLHANDLE sqlconnectionhandle, SQLCHAR* connectionInfo)
 {
-    SQLCHAR sqlstate[1024];
-    SQLCHAR message[1024];
     SQLCHAR retconstring[1024];
     
     //Connects to the databse with the given info
@@ -115,7 +109,7 @@ int openConnectionVerbose(SQLHANDLE sqlconnectionhandle, SQLCHAR* connectionInfo
     return 1;
 }
 
-//Grabbed from http://www.easysoft.com/developer/languages/c/odbc_tutorial.html#connect_full
+//From http://www.easysoft.com/developer/languages/c/odbc_tutorial.html#connect_full
 void extractError(char *fn, SQLHANDLE handle, SQLSMALLINT type) {
     SQLINTEGER i = 0;
     SQLINTEGER native;
@@ -130,7 +124,7 @@ void extractError(char *fn, SQLHANDLE handle, SQLSMALLINT type) {
     {
         ret = SQLGetDiagRec(type, handle, ++i, state, &native, text, sizeof(text), &len );
         if (SQL_SUCCEEDED(ret))
-            printf("%s:%ld:%ld:%s\n", state, i, native, text);
+            printf("%s:%d:%d:%s\n", state, i, native, text);
     }
     while(ret == SQL_SUCCESS);
 }
