@@ -1,19 +1,20 @@
-#include <stdlib.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
-#include <sqltypes.h>
 #include <sql.h>
 #include <sqlext.h>
+#include <sqltypes.h>
 
 #include "games.h"
 
 SQLRETURN addVideoGame(char* name, int publisherID, SQLHANDLE handle) {
-
   VideoGame* g = getGame(name, handle);
 
   if (g != NULL) {
-    fprintf(stderr, "Attempt to add game %s aborted: game with that name already exists.\n",
+    fprintf(
+        stderr,
+        "Attempt to add game %s aborted: game with that name already exists.\n",
         name);
     return SQL_NO_DATA;
   }
@@ -43,17 +44,19 @@ SQLRETURN addVideoGame(char* name, int publisherID, SQLHANDLE handle) {
 }
 
 SQLRETURN addPlatform(char* name, SQLHANDLE handle) {
-  
   Platform* p = getPlatform(name, handle);
-  
+
   if (p != NULL) {
-    fprintf(stderr, "Attempt to add platform %s aborted: platform with that name already exists.\n", name);
+    fprintf(stderr,
+            "Attempt to add platform %s aborted: platform with that name "
+            "already exists.\n",
+            name);
     return SQL_NO_DATA;
   }
 
   SQLCHAR query[256];
 
-  //an unprepared, unsanitized query
+  // an unprepared, unsanitized query
   sprintf(query, "INSERT INTO platform(name) VALUES(\"%s\")", name);
 
   // Sends the query to the SQL server
@@ -66,11 +69,13 @@ SQLRETURN addPlatform(char* name, SQLHANDLE handle) {
 }
 
 SQLRETURN addPublisher(char* name, SQLHANDLE handle) {
-
   Publisher* p = getPublisher(name, handle);
 
   if (p != NULL) {
-    fprintf(stderr, "Attempt to add publisher %s aborted: publisher with that name already exists.\n", name);
+    fprintf(stderr,
+            "Attempt to add publisher %s aborted: publisher with that name "
+            "already exists.\n",
+            name);
     return SQL_NO_DATA;
   }
 
@@ -87,10 +92,11 @@ SQLRETURN addPublisher(char* name, SQLHANDLE handle) {
 
 SQLRETURN addAvailability(int gameID, int platformID, int publishYear,
                           SQLHANDLE handle) {
-
   SQLCHAR query[256];
 
-  sprintf(query, "INSERT INTO availability(game_id, platform_id, publish_year) VALUES(%d, %d, %d)",
+  sprintf(query,
+          "INSERT INTO availability(game_id, platform_id, publish_year) "
+          "VALUES(%d, %d, %d)",
           gameID, platformID, publishYear);
 
   SQLRETURN returnVal = SQLExecDirect(handle, query, SQL_NTS);
@@ -100,10 +106,9 @@ SQLRETURN addAvailability(int gameID, int platformID, int publishYear,
 }
 
 VideoGame** getAllGames(int* numGames, SQLHANDLE handle) {
-
   VideoGame** allGames;  // Holds each game
-  char** names;  // Names of all retrieved games
-  char name[1024];  // Name of a single game
+  char** names;          // Names of all retrieved games
+  char name[1024];       // Name of a single game
 
   // Gets all entries in the game table from the DB
   SQLCHAR query[256];
@@ -118,7 +123,7 @@ VideoGame** getAllGames(int* numGames, SQLHANDLE handle) {
   // the current SQL query, so we need to read in all the game names first,
   // then use those to retrieve the games in a separate query
   names = (char**)malloc(sizeof(char*) * (*numGames));
-  for(int i=0; i < *numGames; i++) {
+  for (int i = 0; i < *numGames; i++) {
     names[i] = (char*)malloc(sizeof(char) * 1024);
   }
 
@@ -129,7 +134,7 @@ VideoGame** getAllGames(int* numGames, SQLHANDLE handle) {
   }
 
   // Actually retrieves the fetched game name
-  for(int i = 0; SQL_SUCCEEDED(returnVal = SQLFetch(handle)); i++) {
+  for (int i = 0; SQL_SUCCEEDED(returnVal = SQLFetch(handle)); i++) {
     strcpy(names[i], name);
   }
 
@@ -138,7 +143,7 @@ VideoGame** getAllGames(int* numGames, SQLHANDLE handle) {
   SQLCloseCursor(handle);
 
   // For each name retrieved, create a complete VideoGame instance
-  for(int i = 0; i < *numGames; i++) {
+  for (int i = 0; i < *numGames; i++) {
     allGames[i] = getGame(names[i], handle);
     // Releases memory allocated for each specific game
     free(names[i]);
@@ -149,7 +154,6 @@ VideoGame** getAllGames(int* numGames, SQLHANDLE handle) {
 }
 
 void getAvailability(VideoGame* game, SQLHANDLE handle) {
-
   int platform_id;
   int publish_year;
 
@@ -216,7 +220,6 @@ void getAvailability(VideoGame* game, SQLHANDLE handle) {
 }
 
 VideoGame* getGame(char* name, SQLHANDLE handle) {
-
   VideoGame* game = malloc(sizeof(VideoGame));
 
   int publisherID;
@@ -233,15 +236,15 @@ VideoGame* getGame(char* name, SQLHANDLE handle) {
     if (numResults == 0) {
       return NULL;
     } else if (numResults > 1) {
-      fprintf(stderr, "WARNING: multiple records (%d) exist for game '%s', returning the first one...\n",
-          numResults, name);
+      fprintf(stderr,
+              "WARNING: multiple records (%d) exist for game '%s', returning "
+              "the first one...\n",
+              numResults, name);
     }
 
     // Maps expected columns to structure/publisherID
-    SQLBindCol(handle, 1, SQL_INTEGER, &game->id, sizeof(game->id),
-               NULL);
-    SQLBindCol(handle, 2, SQL_C_CHAR, &game->name, sizeof(char) * 1024,
-               NULL);
+    SQLBindCol(handle, 1, SQL_INTEGER, &game->id, sizeof(game->id), NULL);
+    SQLBindCol(handle, 2, SQL_C_CHAR, &game->name, sizeof(char) * 1024, NULL);
     SQLBindCol(handle, 3, SQL_INTEGER, &publisherID, sizeof(int), NULL);
 
     // Gets data from DB and pushes into bound variables above
@@ -261,7 +264,8 @@ VideoGame* getGame(char* name, SQLHANDLE handle) {
 
   // Get publisher name from DB given the ID found in the previous query
   char pubName[1024];
-  sprintf(query, "SELECT * FROM publisher WHERE publisher_id = %d", publisherID);
+  sprintf(query, "SELECT * FROM publisher WHERE publisher_id = %d",
+          publisherID);
   returnVal = SQLExecDirect(handle, query, SQL_NTS);
 
   if (returnVal == SQL_SUCCESS || returnVal == SQL_SUCCESS_WITH_INFO) {
@@ -284,7 +288,6 @@ VideoGame* getGame(char* name, SQLHANDLE handle) {
 }
 
 Platform* getPlatform(char* name, SQLHANDLE handle) {
-
   Platform* platform = malloc(sizeof(Platform));
 
   SQLCHAR query[256];
@@ -299,13 +302,15 @@ Platform* getPlatform(char* name, SQLHANDLE handle) {
     if (numResults == 0) {
       return NULL;
     } else if (numResults > 1) {
-      fprintf(stderr, "WARNING: multiple records (%d) exist for platform '%s', returning the first one...\n",
-          numResults, name);
+      fprintf(stderr,
+              "WARNING: multiple records (%d) exist for platform '%s', "
+              "returning the first one...\n",
+              numResults, name);
     }
 
     // Maps expected columns to structure/publisherID
-    SQLBindCol(handle, 1, SQL_INTEGER, &platform->id,
-               sizeof(platform->id), NULL);
+    SQLBindCol(handle, 1, SQL_INTEGER, &platform->id, sizeof(platform->id),
+               NULL);
     SQLBindCol(handle, 2, SQL_C_CHAR, &platform->name, sizeof(char) * 1024,
                NULL);
 
@@ -323,7 +328,6 @@ Platform* getPlatform(char* name, SQLHANDLE handle) {
 }
 
 Publisher* getPublisher(char* name, SQLHANDLE handle) {
-
   Publisher* publisher = malloc(sizeof(Publisher));
 
   SQLCHAR query[256];
@@ -346,8 +350,8 @@ Publisher* getPublisher(char* name, SQLHANDLE handle) {
     }
 
     // Maps expected columns to structure/publisherID
-    SQLBindCol(handle, 1, SQL_INTEGER, &publisher->id,
-               sizeof(publisher->id), NULL);
+    SQLBindCol(handle, 1, SQL_INTEGER, &publisher->id, sizeof(publisher->id),
+               NULL);
     SQLBindCol(handle, 2, SQL_C_CHAR, &publisher->name, sizeof(char) * 1024,
                NULL);
 

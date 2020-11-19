@@ -2,18 +2,17 @@
  * Uses ODBC to establish a connection to a mySQL database
  * filled with various game information.
  */
-#include <stdlib.h>
-#include <stdio.h>
-#include <sqltypes.h>
 #include <sql.h>
 #include <sqlext.h>
+#include <sqltypes.h>
+#include <stdio.h>
+#include <stdlib.h>
 
+#include "databaseInfo.h"
 #include "games.h"
 #include "odbc_utils.h"
-#include "databaseInfo.h"
 
 int main(int argc, char** argv) {
-
   // Each stores various information about the connection
   SQLHANDLE sqlenvhandle;
   SQLHANDLE sqlconnectionhandle;
@@ -24,9 +23,9 @@ int main(int argc, char** argv) {
 
   // Create the string containing information about the database connection
   sprintf(connectionInfo,
-           "DRIVER={%s};SERVER=%s;"
-           "PORT=%s;DATABASE=%s;UID=%s;PWD=%s;",
-           driver, server, port, database, userID, password);
+          "DRIVER={%s};SERVER=%s;"
+          "PORT=%s;DATABASE=%s;UID=%s;PWD=%s;",
+          driver, server, port, database, userID, password);
 
   // Connect to the DB.  Exit if there's a problem.
   if (!setupConnection(&sqlenvhandle, &sqlconnectionhandle, &sqlstatementhandle,
