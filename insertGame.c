@@ -13,7 +13,6 @@
 #include "databaseInfo.h"
 
 int main(int argc, char** argv) {
-  int i;
 
   // Each stores various information about the connection
   SQLHANDLE sqlenvhandle;
@@ -21,10 +20,10 @@ int main(int argc, char** argv) {
   SQLHANDLE sqlstatementhandle;
 
   // String to store info that will be used to connect
-  char* connectionInfo;
+  char connectionInfo[1000];
 
   // Create the string containing information about the database connection
-  asprintf(&connectionInfo,
+  sprintf(connectionInfo,
            "DRIVER={%s};SERVER=%s;"
            "PORT=%s;DATABASE=%s;UID=%s;PWD=%s;",
            driver, server, port, database, userID, password);

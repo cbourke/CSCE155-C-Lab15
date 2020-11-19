@@ -1,9 +1,14 @@
 #
 # makefile for Lab 15 - ODBC
 #
-
-CC = gcc
+# ignore the SQLCHAR* implicit casts
+CC = gcc -std=gnu99 -Wall -Wextra -Wno-pointer-sign -Wno-unused-parameter
 ODBC_LIB = -lodbc
+
+.PHONY: clean
+.PHONY: all
+
+all: listGames insertGame
 
 listGames: databaseInfo.h games.o odbc_utils.o listGames.c
 	$(CC) $(ODBC_LIB) -o listGames games.o odbc_utils.o listGames.c

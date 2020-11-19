@@ -1,4 +1,3 @@
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <sqltypes.h>
@@ -8,7 +7,6 @@
 #include "games.h"
 #include "odbc_utils.h"
 
-//Prints the passed game's information
 void printGame(VideoGame* game) {
 
     int i;
@@ -30,7 +28,6 @@ void printGame(VideoGame* game) {
     } 
 }
 
-//Does all the handle initialization/connections.  Returns 0 on fatal error, 1 on success.
 int setupConnection(SQLHANDLE* sqlenvhandle, SQLHANDLE* sqlconnectionhandle, 
                     SQLHANDLE* sqlstatementhandle, SQLCHAR* connectionInfo)
 {
