@@ -4,24 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "games.h"
 #include "odbc_utils.h"
-
-void printGame(VideoGame* game) {
-  printf("Name: %s\n\tID: %d\n\tPublisher: ", game->name, game->id);
-
-  // Publisher may be unknown
-  if (game->publisher != NULL)
-    printf("%s\n", game->publisher->name);
-  else
-    printf("Unknown\n");
-
-  // Iterates over this games platforms
-  for (int i = 0; i < game->numPlatforms; i++) {
-    printf("\tReleased on platform %s in %d\n", game->platforms[i]->name,
-           game->years[i]);
-  }
-}
 
 int setupConnection(SQLHANDLE* sqlenvhandle, SQLHANDLE* sqlconnectionhandle,
                     SQLHANDLE* sqlstatementhandle, SQLCHAR* connectionInfo) {
@@ -101,8 +84,6 @@ int openConnectionVerbose(SQLHANDLE sqlconnectionhandle,
   return 1;
 }
 
-// From
-// http://www.easysoft.com/developer/languages/c/odbc_tutorial.html#connect_full
 void extractError(char* fn, SQLHANDLE handle, SQLSMALLINT type) {
   SQLINTEGER i = 0;
   SQLINTEGER native;

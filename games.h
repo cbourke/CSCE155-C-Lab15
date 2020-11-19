@@ -28,6 +28,11 @@ typedef struct {
 } VideoGame;
 
 /**
+ * Prints the given game to the standard output.
+ */
+void printGame(const VideoGame* game);
+
+/**
  * Adds a video game record to the database with the
  * given name and associating it with the publisher
  * identified by the given publisherID.

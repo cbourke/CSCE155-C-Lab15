@@ -367,3 +367,19 @@ Publisher* getPublisher(char* name, SQLHANDLE handle) {
 
   return publisher;
 }
+
+void printGame(const VideoGame* game) {
+  printf("Name: %s\n\tID: %d\n\tPublisher: ", game->name, game->id);
+
+  // Publisher may be unknown
+  if (game->publisher != NULL)
+    printf("%s\n", game->publisher->name);
+  else
+    printf("Unknown\n");
+
+  // Iterates over this game's platforms
+  for (int i = 0; i < game->numPlatforms; i++) {
+    printf("\tReleased on platform %s in %d\n", game->platforms[i]->name,
+           game->years[i]);
+  }
+}
