@@ -11,10 +11,10 @@ ODBC_LIB = -lodbc
 all: listGames insertGame
 
 listGames: databaseInfo.h games.o odbc_utils.o listGames.c
-	$(CC) $(ODBC_LIB) -o listGames games.o odbc_utils.o listGames.c
+	$(CC) -o listGames games.o odbc_utils.o listGames.c $(ODBC_LIB)
 
 insertGame: databaseInfo.h games.o odbc_utils.o insertGame.c
-	$(CC) $(ODBC_LIB) -o insertGame games.o odbc_utils.o insertGame.c
+	$(CC) -o insertGame games.o odbc_utils.o insertGame.c $(ODBC_LIB)
 
 odbc_utils.o: odbc_utils.c odbc_utils.h
 	$(CC) -c -o odbc_utils.o odbc_utils.c
